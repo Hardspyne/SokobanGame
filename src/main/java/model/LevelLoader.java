@@ -1,19 +1,26 @@
 package model;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
 import static model.Model.FIELD_CELL_SIZE;
 
 public class LevelLoader {
-    private Path levels;
+    private ArrayList<String> allLines = new ArrayList<>();
 
-    public LevelLoader(Path levels) {
-        this.levels = levels;
+    public LevelLoader(InputStream inputStream) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                allLines.add(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public GameObjects getLevel(int level) {
@@ -25,7 +32,7 @@ public class LevelLoader {
         int x0 = FIELD_CELL_SIZE / 2;
         int y0 = FIELD_CELL_SIZE / 2;
 
-        ArrayList<String> levelLines = getLevelLines(level);
+        ArrayList<String> levelLines = getLevelLinesFromInputStream(level);
 
         for (int i = 0; i < levelLines.size(); i++) {
             String line = levelLines.get(i);
@@ -54,21 +61,14 @@ public class LevelLoader {
         return new GameObjects(walls, boxes, homes, player);
     }
 
-    public ArrayList<String> getLevelLines(int level) {
-        List<String> listLine = new ArrayList<>();
-        try {
-            listLine = Files.readAllLines(levels);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+    private ArrayList<String> getLevelLinesFromInputStream(int level) {
         ArrayList<String> levelLine = new ArrayList<>();
 
         level = level % 60 == 0 ? 60 : level % 60;
-        int firstIndex = listLine.indexOf("Maze: " + level) + 7;
+        int firstIndex = allLines.indexOf("Maze: " + level) + 7;
 
-        for (int i = firstIndex; !listLine.get(i).isEmpty(); i++) {
-            levelLine.add(listLine.get(i));
+        for (int i = firstIndex; !allLines.get(i).isEmpty(); i++) {
+            levelLine.add(allLines.get(i));
         }
 
         return levelLine;

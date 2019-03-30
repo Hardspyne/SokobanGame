@@ -17,11 +17,10 @@ public class View extends JFrame {
     public void init() {
         field = new Field(this);
         add(field);
-
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setSize(500, 500);
+        setSize(500, 600);
         setLocationRelativeTo(null);
-        setTitle("Сокобан");
+        setTitle("Сокобан. Уровень " + 1);
         setVisible(true);
     }
 
@@ -29,7 +28,8 @@ public class View extends JFrame {
         field.setEventListener(eventListener);
     }
 
-    public void update() {
+    public void update()
+    {
         field.repaint();
     }
 
@@ -41,5 +41,7 @@ public class View extends JFrame {
         this.update();
         JOptionPane.showMessageDialog(this, "Уровень " + level + " пройден!");
         controller.startNextLevel();
+
+        setTitle("Сокобан. Уровень " + ++level);
     }
 }

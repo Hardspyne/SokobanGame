@@ -6,6 +6,7 @@ package view;
 
 import controller.EventListener;
 import model.Direction;
+import model.Home;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,7 +28,8 @@ public class Field extends JPanel {
     public void paint(Graphics g) {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, 500, 500);
-        view.getGameObjects().getAll().forEach(gameObject -> gameObject.draw(g));
+        view.getGameObjects().getHomes().forEach(home -> home.draw(g));//нужно чтобы дома были обязательно под ящиками
+        view.getGameObjects().getAll().forEach(gameObject -> {if (!(gameObject instanceof Home))gameObject.draw(g);});
     }
 
     public void setEventListener(EventListener eventListener) {

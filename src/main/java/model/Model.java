@@ -2,11 +2,6 @@ package model;
 
 
 import controller.EventListener;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 
 public class Model {
@@ -15,21 +10,7 @@ public class Model {
     private GameObjects gameObjects;
     private int currentLevel = 1;
 
-    private LevelLoader levelLoader;
-    //добавлено для того, чтобы можно было запускать как из IDE, так и с помощью jar файла
-    {
-        Path path = Paths.get("src\\main\\resources\\levels.txt");
-        try {
-            if (path.toFile().exists()) {
-                levelLoader = new LevelLoader(Files.newInputStream(path));
-            } else {
-                levelLoader = new LevelLoader(this.getClass().getResourceAsStream("/levels.txt"));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
+    private LevelLoader levelLoader = new LevelLoader(this.getClass().getResourceAsStream("/levels.txt"));
 
     public void setEventListener(EventListener eventListener) {
         this.eventListener = eventListener;
